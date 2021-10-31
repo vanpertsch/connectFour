@@ -1,0 +1,282 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    background: url(./images/rasen.jpg) no-repeat;
+    background-size: cover;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    min-width: 20%;
+    align-content: space-around;
+}
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.board {
+    display: flex;
+    max-width: 80%;
+    max-height: 80vh;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.slot {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+}
+
+.hole {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    /* border: 40px solid blue; */
+    border: 40px solid rgba(255, 255, 255, 0.5);
+    transform: translate(-35px, -35px);
+}
+
+.player1 {
+    /* background-color: red; */
+    background: url(./images/poppy.png) no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    -webkit-animation: grow 10s linear;
+    animation: grow 0.5s linear;
+    animation-fill-mode: forwards;
+    background-size: 100%;
+    background-origin: center;
+    transform: rotate(0deg);
+}
+.player1-dark {
+    /* background-color: red; */
+    background: url(./images/mars.png) no-repeat;
+}
+
+.player2 {
+    /* background-color: yellow; */
+    background: url(./images/sunflower-1.png) no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    -webkit-animation: grow 10s linear;
+    animation: grow 0.5s linear;
+    animation-fill-mode: forwards;
+    background-size: 100%;
+    background-origin: center;
+    transform: rotate(0deg);
+}
+.player2-dark {
+    /* background-color: yellow; */
+    background: url(./images/yelplanet.png) no-repeat;
+}
+
+.chip {
+    background: url(./images/poppy.png) no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 100%;
+    background-origin: center;
+
+    width: 90px;
+    /* top: 57px + 5px; */
+    top: 62px;
+    /* left: 533px + 5px; */
+    /* left: 538px; */
+    z-index: 1;
+    height: 90px;
+    /* border-radius: 50%; */
+    /* background-color: orangered; */
+    position: absolute;
+    transition: top ease-in 0.5s, left ease-in-out 0.2s;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reset button,
+.space button,
+.buildBoard button {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    border: 1px solid black;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 1.13rem;
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+}
+.reset button:hover,
+.buildBoard button:hover,
+.space button:hover {
+    color: white;
+    background-color: black;
+    border-color: white;
+}
+
+.reset,
+.space,
+.buildBoard {
+    text-align: center;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+}
+
+.info {
+    padding: 15px;
+    /* width: 20%; */
+    height: 50vh;
+    margin-left: 5%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 7px;
+    border: 1px solid rgb(91, 151, 64);
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.info > h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.5rem;
+    text-decoration: cadetblue;
+    display: block;
+    text-transform: uppercase;
+}
+
+.info-player {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 80%;
+}
+.underlay {
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    text-align: center;
+}
+
+.border {
+    border: 3px solid rgba(0, 0, 0, 0.6);
+}
+
+.playerIcon {
+    width: 5rem;
+    height: 5rem;
+    opacity: 0.7;
+}
+
+.on {
+    opacity: 1;
+    width: 5.3rem;
+    height: 5.3rem;
+}
+
+.info-msg {
+    min-height: 1px;
+    margin-bottom: 12px;
+}
+.info-msg p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.overlay {
+    width: 65%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    background-color: rgba(255, 215, 0, 0.7);
+    pointer-events: none;
+    /* transition: 1.2s ease-in-out; */
+}
+
+.congrats {
+    font-size: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.winner {
+    width: 6rem;
+    height: 6rem;
+    opacity: 1;
+    animation: rotate 2s infinite linear;
+}
+
+.win-msg {
+    /* color:rgba(255, 215, 0, 0.7) */
+    color: white;
+    animation: changeColor 1s infinite linear;
+}
+
+@keyframes grow {
+    0% {
+        background-size: 20%;
+    }
+    100% {
+        background-size: 100%;
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg); /* Equal to rotateZ(45deg) */
+    }
+    100% {
+        transform: rotate(360deg); /* Equal to rotateZ(45deg) */
+    }
+}
+@keyframes changeColor {
+    0% {
+        color: white; /* Equal to rotateZ(45deg) */
+    }
+    50% {
+        color: gold; /* Equal to rotateZ(45deg) */
+    }
+    100% {
+        color: white;
+    }
+}
+
+/* dark space mode */
+
+body.dark {
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    background: url(./images/moon.jpg) no-repeat;
+    background-size: cover;
+}
+
+.off {
+    pointer-events: none;
+}
