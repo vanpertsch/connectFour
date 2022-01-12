@@ -1,54 +1,77 @@
 (function () {
     console.log("conected :)");
 
+    var cols = 7;
+    var rows = 6;
     //track who is current Player
     var curPlayer = "player1";
 
-    //recognize which column got clicked
-    $(".column").on("click", function (e) {
-
-        var col = $(e.currentTarget);
-
-        var slotsInColumn = col.children();
-
-        dropChip(col, slotsInColumn);
-
-        for (var i = slotsInColumn.length - 1; i >= 0; i--) {
-
-            if (!slotsInColumn.eq(i).hasClass("player1") && !slotsInColumn.eq(i).hasClass("player2")) {
+    buildBoard(cols, rows);
+    addFunctionaltiyToBoard();
 
 
-                if ($("body").hasClass("dark")) {
-                    slotsInColumn.eq(i).addClass([curPlayer, curPlayer + "-dark"]);
-                    // console.log(slotsInColumn.eq(i));
-                    break;
 
-                } else {
-                    slotsInColumn.eq(i).addClass(curPlayer);
-                    // console.log(slotsInColumn.eq(i));
-                    break;
+
+    function buildBoard(col, row) {
+        var rowHtml = "";
+        var colHtml = "";
+
+        for (var j = 0; j < row; j++) {
+            rowHtml += "<div class='slot row" + j + "'><div class='hole'></div></div>";
+        }
+
+        for (var i = 0; i < col; i++) {
+            colHtml += "<div class='column'>" + rowHtml + "</div>";
+        }
+
+        $(".board").html(colHtml);
+    }
+
+    function addFunctionaltiyToBoard() {
+
+        //recognize which column got clicked
+        $(".column").on("click", function (e) {
+
+            var col = $(e.currentTarget);
+
+            var slotsInColumn = col.children();
+
+            // dropChip(col, slotsInColumn);
+
+            for (var i = slotsInColumn.length - 1; i >= 0; i--) {
+
+                if (!slotsInColumn.eq(i).hasClass("player1") && !slotsInColumn.eq(i).hasClass("player2")) {
+
+
+                    if ($("body").hasClass("dark")) {
+                        slotsInColumn.eq(i).addClass([curPlayer, curPlayer + "-dark"]);
+                        // console.log(slotsInColumn.eq(i));
+                        break;
+
+                    } else {
+                        slotsInColumn.eq(i).addClass(curPlayer);
+                        // console.log(slotsInColumn.eq(i));
+                        break;
+                    }
+
                 }
-
             }
-        }
+            if (i === -1) {
+                return;
+            }
+            //get row
+            var slotsInRow = $(".row" + i);
 
-        if (i === -1) {
-            return;
-        }
+            if (checkForFourEquals(slotsInRow) ||
+                checkForFourEquals(slotsInColumn) ||
+                checkForFourEqualsInDiagonals(parseInt(rows) + 1) ||
+                checkForFourEqualsInDiagonals(rows - 1)) {
+                startGratulation(curPlayer);
+            }
 
-        //get row
-        var slotsInRow = $(".row" + i);
-
-
-        checkForFourEquals(slotsInRow);
-        checkForFourEquals(slotsInColumn);
-        checkForFourEqualsInDiagonals(5);
-        checkForFourEqualsInDiagonals(7);
-
-        switchPlayer();
-
-    });
-
+            switchPlayer();
+        });
+    }
 
 
 
@@ -56,6 +79,8 @@
     $(".space button").on("click", function () {
         reset();
         $("body").addClass("dark");
+        $(".board").addClass("dark");
+        $(".info").addClass("dark");
 
         $(".playerIcon1").attr('src', './images/mars.png');
         $(".playerIcon2").attr('src', './images/yelplanet.png');
@@ -69,9 +94,10 @@
     $(".reset button").on("click", function () {
         window.location.reload();
     });
+
     $(".buildBoard button").on("click", function () {
 
-        getNumbers();
+        buildCustomBoard();
     });
 
     function switchPlayer() {
@@ -104,13 +130,10 @@
         var counter = 0;
         for (var i = 0; i < arr.length; i++) {
             if (arr.eq(i).hasClass(curPlayer)) {
-                // console.log("hor/ver");
+
                 counter++;
                 if (counter === 4) {
-
-
-
-                    startKonfettiRain(curPlayer);
+                    startGratulation(curPlayer);
 
                     return true;
                 }
@@ -122,7 +145,6 @@
     }
 
     function checkForFourEqualsInDiagonals(k) {
-        // console.log(k);
 
         var slots = $(".slot");
 
@@ -137,18 +159,9 @@
 
                 if (second.hasClass(curPlayer) && (second.parent().prev().is(first.parent()) || second.parent().prev().is(third.parent()) || second.parent().prev().is(fourth.parent()))) {
 
-
-
                     if (third.hasClass(curPlayer) && (third.parent().prev().is(first.parent()) || third.parent().prev().is(second.parent()) || third.parent().prev().is(fourth.parent()))) {
 
-
-
                         if (fourth.hasClass(curPlayer) && (fourth.parent().prev().is(first.parent()) || fourth.parent().prev().is(second.parent()) || fourth.parent().prev().is(third.parent()))) {
-
-
-                            startKonfettiRain(curPlayer);
-
-
                             return true;
                         }
 
@@ -162,10 +175,8 @@
 
 
 
-    function startKonfettiRain(curPlayer) {
+    function startGratulation(curPlayer) {
 
-        // var symb = [🥇,⭐️,✨,🎉,];
-        // var pokal = 🏆;
         $(".column").addClass("off");
         $(".buildBoard").hide();
         if (curPlayer === "player1") {
@@ -211,76 +222,18 @@
         curPlayer = "player1";
     }
 
-    function buildBoard(col, row) {
-
-        var rowHtml = "";
-        var colHtml = "";
-
-        for (var j = 0; j < row; j++) {
-
-            rowHtml += "<div class='slot row" + j + "'><div class='hole'></div></div>";
-        }
-
-
-        for (var i = 0; i < col; i++) {
-            colHtml += "<div class='column'>" + rowHtml + "</div>";
-        }
-
-
-        $(".board").html(colHtml);
-
-    }
 
 
 
-    function getNumbers() {
+    function buildCustomBoard() {
 
         try {
-            var cols = askForColumns();
-            var rows = askForRows();
+            cols = askForColumns();
+            rows = askForRows();
 
             buildBoard(cols, rows);
 
-            $(".column").on("click", function (e) {
-
-                var col = $(e.currentTarget);
-
-                var slotsInColumn = col.children();
-
-                for (var i = slotsInColumn.length - 1; i >= 0; i--) {
-
-                    if (!slotsInColumn.eq(i).hasClass("player1") && !slotsInColumn.eq(i).hasClass("player2")) {
-
-
-                        if ($("body").hasClass("dark")) {
-                            slotsInColumn.eq(i).addClass([curPlayer, curPlayer + "-dark"]);
-                            // console.log(slotsInColumn.eq(i));
-                            break;
-
-                        } else {
-                            slotsInColumn.eq(i).addClass(curPlayer);
-                            // console.log(slotsInColumn.eq(i));
-                            break;
-                        }
-
-                    }
-                }
-
-                if (i === -1) {
-                    return;
-                }
-
-                //get row
-                var slotsInRow = $(".row" + i);
-
-
-                checkForFourEquals(slotsInRow);
-                checkForFourEquals(slotsInColumn);
-                checkForFourEqualsInDiagonals(parseInt(rows) + 1);
-                checkForFourEqualsInDiagonals(rows - 1);
-
-                switchPlayer();
-            });
+            addFunctionaltiyToBoard();
 
 
         } catch (e) {
@@ -308,36 +261,36 @@
     }
 
 
-    function dropChip(col, slotsInColumn) {
+    // function dropChip(col, slotsInColumn) {
 
-        // offsetHeight: 600
-        // offsetLeft: 133
-        // offsetTop: -23
-        // offsetWidth: 100
-
-
+    //     // offsetHeight: 600
+    //     // offsetLeft: 133
+    //     // offsetTop: -23
+    //     // offsetWidth: 100
 
 
-        // offsetHeight: 100
-        // offsetLeft: 133
-        // offsetParent: body
-        // offsetTop: 477
-        // offsetWidth: 100
 
-        console.log(col);
-        console.log(slotsInColumn);
 
-        for (var i = slotsInColumn.length - 1; i >= 0; i--) {
+    //     // offsetHeight: 100
+    //     // offsetLeft: 133
+    //     // offsetParent: body
+    //     // offsetTop: 477
+    //     // offsetWidth: 100
 
-            var isFreeSlot = !slotsInColumn.eq(i).hasClass("player1") && !slotsInColumn.eq(i).hasClass("player2");
+    //     console.log(col);
+    //     console.log(slotsInColumn);
 
-            console.log(isFreeSlot);
-        }
-        $(".chip").css({
-            left: col[0].offsetLeft,
-            top: "500px"
-        });
+    //     for (var i = slotsInColumn.length - 1; i >= 0; i--) {
 
-    }
+    //         var isFreeSlot = !slotsInColumn.eq(i).hasClass("player1") && !slotsInColumn.eq(i).hasClass("player2");
+
+    //         console.log(isFreeSlot);
+    //     }
+    //     $(".chip").css({
+    //         left: col[0].offsetLeft,
+    //         top: "500px"
+    //     });
+
+    // }
 })();
 
