@@ -15,4 +15,4 @@ Connect Four is a classic two-player game where players take turns dropping colo
 - **HTML**: Structure of the web page.
 - **Netlify**: Hosting platform.
 
-Play [Connect Four](nervous-goldwasser-d1fca7.netlify.app/) 🐞
+Play [Connect Four](https://nervous-goldwasser-d1fca7.netlify.app/) 🐞
